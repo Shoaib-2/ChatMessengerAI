@@ -1,10 +1,10 @@
 ///Calling all the dependencies or the imports.
-require('dotenv').config();
+require('dotenv/config');
 const express = require ('express')
 const cors = require ('cors')
-const { db } = require ('mongodb');
-const { connectToDatabase } = require('./dbUtils') ;
-const { Chat } = require('openai');
+const { db, Db } = require ('mongodb');
+const { connectToDatabase } = require('./dbUtils.js') ;
+const { chat } = require('openai');
 
 //app using express.
 const app = express();
@@ -21,7 +21,7 @@ app.post("/chat", async(req, res) => {
     //For completion and getting the response from openAi.
     try {
         const { db } = await connectToDatabase();
-        const collection = db.collection('Chats');
+        const collection = db.collection('ChatMessengerAI');
         await collection.insertOne({ message });
         res.status(200).json({ message: 'Message saved successfully' });
      } catch (error) {
@@ -39,7 +39,7 @@ app.get('/chat', async (req, res)=>{
         res.status(500).json({error: 'Error fetching chat history!'})
     }
 })
-const PORT = process.env.PORT || 3000/Chat
+const PORT = process.env.PORT 
 //Checking if the port is running or not
 app.listen(PORT, () => {
     console.log(`Server is up and running on port: ${PORT}`);
