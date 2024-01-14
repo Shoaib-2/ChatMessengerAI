@@ -1,0 +1,109 @@
+{/* <ref *1> MongoClient {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  mongoLogger: MongoLogger {
+    error: [Function: bound log],
+    warn: [Function: bound log],
+    info: [Function: bound log],
+    debug: [Function: bound log],
+    trace: [Function: bound log],
+    componentSeverities: {
+      command: 'off',
+      topology: 'off',
+      serverSelection: 'off',
+      connection: 'off',
+      client: 'off',
+      default: 'off'
+    },
+    maxDocumentLength: 1000,
+    logDestination: { write: [Function: write] }
+  },
+  s: {
+    url: 'mongodb+srv://RadicalGenAI:O64Qi0Zb4eDqaZsi@shoaibgenaidb.h06439j.mongodb.net/ChatMessengerAI?retryWrites=true&w=majority',
+    bsonOptions: {
+      raw: false,
+      useBigInt64: false,
+      promoteLongs: true,
+      promoteValues: true,
+      promoteBuffers: false,
+      ignoreUndefined: false,
+      bsonRegExp: false,
+      serializeFunctions: false,
+      fieldsAsRaw: {},
+      enableUtf8Validation: true
+    },
+    namespace: MongoDBNamespace { db: 'admin', collection: undefined },
+    hasBeenClosed: false,
+    sessionPool: ServerSessionPool { client: [Circular *1], sessions: [List] },
+    activeSessions: Set(0) {},
+    options: [Getter],
+    readConcern: [Getter],
+    writeConcern: [Getter],
+    readPreference: [Getter],
+    isMongoClient: [Getter]
+  },
+  connectionLock: Promise { <pending> },
+  [Symbol(kCapture)]: false,
+  [Symbol(options)]: [Object: null prototype] {
+    hosts: [],
+    credentials: MongoCredentials {
+      username: 'RadicalGenAI',
+      password: 'O64Qi0Zb4eDqaZsi',
+      source: 'ChatMessengerAI',
+      mechanism: 'DEFAULT',
+      mechanismProperties: {}
+    },
+    compressors: [ 'none' ],
+    connectTimeoutMS: 30000,
+    dbName: 'ChatMessengerAI',
+    directConnection: false,
+    driverInfo: {},
+    enableUtf8Validation: true,
+    forceServerObjectId: false,
+    heartbeatFrequencyMS: 10000,
+    loadBalanced: false,
+    localThresholdMS: 15,
+    maxConnecting: 2,
+    maxIdleTimeMS: 0,
+    maxPoolSize: 100,
+    minPoolSize: 0,
+    minHeartbeatFrequencyMS: 500,
+    monitorCommands: false,
+    noDelay: true,
+    pkFactory: { createPk: [Function: createPk] },
+    raw: false,
+    readPreference: ReadPreference {
+      mode: 'primary',
+      tags: undefined,
+      hedge: undefined,
+      maxStalenessSeconds: undefined,
+      minWireVersion: undefined
+    },
+    retryReads: true,
+    retryWrites: true,
+    serverMonitoringMode: 'auto',
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 0,
+    srvMaxHosts: 0,
+    srvServiceName: 'mongodb',
+    writeConcern: WriteConcern { w: 'majority' },
+    waitQueueTimeoutMS: 0,
+    zlibCompressionLevel: 0,
+    userSpecifiedAuthSource: false,
+    userSpecifiedReplicaSet: false,
+    srvHost: 'shoaibgenaidb.h06439j.mongodb.net',
+    tls: true,
+    mongoLoggerOptions: {
+      componentSeverities: [Object],
+      maxDocumentLength: 1000,
+      logDestination: [Object]
+    },
+    metadata: {
+      driver: [Object],
+      platform: 'Node.js v20.10.0, LE',
+      os: [Object]
+    },
+    [Symbol(@@mdb.enableMongoLogger)]: false
+  }
+} */}

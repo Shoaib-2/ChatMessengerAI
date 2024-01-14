@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import {MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator} from "@chatscope/chat-ui-kit-react"
-const apiKey = "";
+
+
+const apiKey = "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";
 const systemMessage = {
   role: "system",
   content: "Explain things like you're talking to a software professional with 2 years of experience."
@@ -84,9 +86,12 @@ const newMessages = [...messages, newMessage]; // Old message + can see the new 
           sentTime: new Date().toLocaleTimeString(),
         }]
       )
+      console.log(chatMessages)
       setTyping(false)
     })
   }
+
+
   return (
     <div className="App">
       <div style={{position: "relative", height: "800px",width: "700px"}}>
