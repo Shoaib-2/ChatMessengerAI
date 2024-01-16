@@ -1,90 +1,151 @@
-// /Calling all the dependencies or the imports.
-require('dotenv/config');
-const express = require ('express')
-const cors = require ('cors')
-const db = require ('mongodb');
-const { connectToDatabase, closeConnection, connectionpointer } = require('./dbUtils.js') ;
-const { Chat } = require('openai')
-const UserModule = require('../backend/models/userModel.js')
+// Different code
+require("dotenv/config");
 
-//app using express.
+const express = require("express");
+const cors = require("cors");
+const db = require("mongodb");
+const {
+  connectToDatabase,
+  closeConnection,
+  sendDataToSever,
+} = require("./dbUtils.js");
+const { Chat } = require("openai");
+const UserModule = require("../backend/models/userModel.js");
+const api_Key = process.env.OPENAI_API_KEY;
+console.log(api_Key);
 const app = express();
-//Using cors for middleware of express.
 app.use(cors());
 app.use(express.json());
 
+//Setting prompts and response for the front-end.
 
-//End-point for connecting back-end to the frond-end. Using the /chat for connecting it.
-// app.post("/Chat", async(req, res) => {
+// async function connectToServer() {
+//   const db = await connectToDatabase();
+//   const collection = db.collection("user");
+//   return collection;
+// }
 
-//     //For user prompts.
-//     const {message} = req.body
-//     const userData = {
-//         "name": { "first": "Alan", "last": "Turing" },
-//              "birth": new Date(1912, 5, 23), // May 23, 1912                                                                                                                                 
-//              "death": new Date(1954, 5, 7),  // May 7, 1954                                                                                                                                  
-//              "contribs": [ "Turing machine", "Turing test", "Turingery" ],
-//              "views": 1250000
-//     }
-//     UserModule.createUser(userData)
-//     console.log(userData)
-//     //For completion and getting the response from openAi.
-//     try {
-//         const db = await connectToDatabase();
-//         databasesList = await client.db().admin().listDatabases();
+// async function disconnectFromServer(client) {
+//   await client.close();
+// }
 
-//         const collection = db.collection('user');
+// async function sendDataToSever(client, text) {
+//   const result = await pointer2.insertOne({
+//     _id: 13,
+//     item: "anotherone2",
+//     qty: 50,
+//     type: "no.2",
+//   });
+// }
 
-//         await collection.insertOne({ userData });
-//         client.close()
-//         res.status(200).json({ message: 'Message saved successfully' });
-//      } catch (error) {
-//         res.status(500).json({ error: 'Error saving message' });
-//      }
-// })
-app.get('/Chat', async (req, res)=>{
-    try{
-        const db = await connectToDatabase();
-        const collection = db.collection('user');
-        
-        //This runs
-        console.log("runs here");
-        const result = await collection.insertOne(
-            { _id: 13, item: "anotherone3", qty: 50, type: "no.3" }
-        )
-     
-        // res.status(200).json(chatHistory);
-        console.log("Sent data");
-        console.log(result);
+
+
+let messages = [
+  {
+    message: "Hello, I am GPT-AI",
+    SentTime: "just now",
+    sender: "ChatGPT",
+  },
+];
+
+let connectionPointer = connectToDatabase();
+
+
+let newMessages = [messages]
+
+const apiKey = "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";
+const systemMessage = {
+  role: "system",
+  content:
+    "Explain things like you're talking to a software professional with 2 years of experience.",
+};
+
+async function handleSend (message) {
+  try {
+    const newMessage = {
+      message,
+      sender: "User",
+      direction: "outgoing",
+      sentTime: new Date().toLocaleTimeString(),
+    };
+    messages = [...messages, newMessage]; // Old message + can see the new message.
+    await processMessageToGPT(messages);
+    
+    return messages
+  } catch (e) { console.log(e); return messages; }
+};
+
+async function processMessageToGPT(chatMessages) {
+  // console.log("from 2nd func")
+  // console.log(chatMessages)
+  let currentGptMessage = "";
+  let apiMessages = chatMessages.map((messageObject) => {
+    let role = "";
+    if (messageObject.sender === "ChatGPT") {
+      role = "assistant";
+    } else {
+      role = "user";
     }
-    catch (error){
-        res.status(500).json({error: error})
-    }
+    return { role: role, content: messageObject.message };
+  });
+  const apiResquestBody = {
+    model: "gpt-3.5-turbo",
+    messages: [systemMessage, ...apiMessages],
+    // max_tokens: 200,
+  };
+  await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(apiResquestBody),
+  }).then((data) => {
+      return data.json();
+  }).then((data) => {
+      // console.log(data);
+      // console.log(data.choices[0].message.content);
+      console.log(data)
+      currentGptMessage = data.choices[0].message.content;
+      
+      messages = [...messages,
+      {
+        message: data.choices[0].message.content,
+        sender: "ChatGPT",
+        direction: "incoming",
+        sentTime: new Date().toLocaleTimeString(),
+      }
+    ]
+  }
+  );
+
+  // console.log(messages);
+  // console.log(apiMessages[apiMessages.length - 1].content);
+  // console.log(newMessages);
+}
+
+app.post("/Chat", async (req, res, next) => {
+  // userMessage = req.body['gpt_message'];
+  messages = await handleSend(req.body['gpt_message']);
+  // console.log("this is messages")
+  // console.log(messages)
+  res.send({"messages": messages});
+  // console.log(req.body);
+  // console.log(messages[messages.length - 1])
+  
+  // console.log(messages[messages.length - 2])
+  sendDataToSever(messages[messages.length - 2]);
+  sendDataToSever(messages[messages.length - 1]);
+
+});
+
+
+app.post('/', (req, res) => {
+  res.send('hello world')
 })
-const PORT = process.env.PORT || 5000
-//Checking if the port is running or not
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is up and running on port: ${PORT}`);
-})
-
-//User database.
-async  function connectToServer(){
-    const db = await connectToDatabase();
-        const collection = db.collection('user');
-        return collection;
- } 
-
-
-
- async function disconnectFromServer(client){
-    await client.close();
- }
- async function sendDataToSever(client, text){
-    const result = await pointer2.insertOne(
-        { _id: 13, item: "anotherone2", qty: 50, type: "no.2" }
-    )
- }
-
-
-
+  console.log(`Server is up and running on port: ${PORT}`);
+});
 
