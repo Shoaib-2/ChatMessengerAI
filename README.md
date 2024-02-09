@@ -17,8 +17,6 @@ React Frontend: With React as the frontend framework, our application delivers a
 
 MongoDB Database: Utilizing MongoDB as the database solution, our application stores and organizes user messages, conversations, and relevant metadata, ensuring data persistence, scalability, and efficient retrieval.
 
-Real-time Communication: Leveraging WebSocket technology, our messenger application enables real-time communication between users, ensuring instant message delivery and a seamless chat experience.
-
 Development Workflow:
 
 Requirements Analysis: I conducted a thorough analysis of user requirements and expectations to define the scope and features of the chat messenger application accurately.
