@@ -1,4 +1,4 @@
-// Different code
+
 require("dotenv/config");
 
 const express = require("express");
@@ -17,28 +17,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//Setting prompts and response for the front-end.
-
-// async function connectToServer() {
-//   const db = await connectToDatabase();
-//   const collection = db.collection("user");
-//   return collection;
-// }
-
-// async function disconnectFromServer(client) {
-//   await client.close();
-// }
-
-// async function sendDataToSever(client, text) {
-//   const result = await pointer2.insertOne({
-//     _id: 13,
-//     item: "anotherone2",
-//     qty: 50,
-//     type: "no.2",
-//   });
-// }
-
-
 
 let messages = [
   {
@@ -53,7 +31,7 @@ let connectionPointer = connectToDatabase();
 
 let newMessages = [messages]
 
-const apiKey = "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";
+const apiKey = process.env.OPENAI_API_KEY;
 const systemMessage = {
   role: "system",
   content:
@@ -76,8 +54,6 @@ async function handleSend (message) {
 };
 
 async function processMessageToGPT(chatMessages) {
-  // console.log("from 2nd func")
-  // console.log(chatMessages)
   let currentGptMessage = "";
   let apiMessages = chatMessages.map((messageObject) => {
     let role = "";
@@ -103,8 +79,6 @@ async function processMessageToGPT(chatMessages) {
   }).then((data) => {
       return data.json();
   }).then((data) => {
-      // console.log(data);
-      // console.log(data.choices[0].message.content);
       console.log(data)
       currentGptMessage = data.choices[0].message.content;
       
@@ -118,22 +92,11 @@ async function processMessageToGPT(chatMessages) {
     ]
   }
   );
-
-  // console.log(messages);
-  // console.log(apiMessages[apiMessages.length - 1].content);
-  // console.log(newMessages);
 }
 
 app.post("/Chat", async (req, res, next) => {
-  // userMessage = req.body['gpt_message'];
   messages = await handleSend(req.body['gpt_message']);
-  // console.log("this is messages")
-  // console.log(messages)
   res.send({"messages": messages});
-  // console.log(req.body);
-  // console.log(messages[messages.length - 1])
-  
-  // console.log(messages[messages.length - 2])
   sendDataToSever(messages[messages.length - 2]);
   sendDataToSever(messages[messages.length - 1]);
 
